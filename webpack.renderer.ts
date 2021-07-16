@@ -30,6 +30,7 @@ import ProgressBarPlugin from "progress-bar-webpack-plugin";
 import ReactRefreshWebpackPlugin from "@pmmmwh/react-refresh-webpack-plugin";
 import MonacoWebpackPlugin from "monaco-editor-webpack-plugin";
 import getTSLoader from "./src/common/getTSLoader";
+import CircularDependencyPlugin from "circular-dependency-plugin";
 
 export default [
   webpackLensRenderer,
@@ -158,14 +159,6 @@ export function webpackLensRenderer({ showVars = true } = {}): webpack.Configura
         globalAPI: isDevelopment,
       }),
 
-      // todo: fix remain warnings about circular dependencies
-      // new CircularDependencyPlugin({
-      //   cwd: __dirname,
-      //   exclude: /node_modules/,
-      //   allowAsyncCycles: true,
-      //   failOnError: false,
-      // }),
-
       // todo: check if this actually works in mode=production files
       // new webpack.DllReferencePlugin({
       //   context: process.cwd(),
@@ -177,6 +170,12 @@ export function webpackLensRenderer({ showVars = true } = {}): webpack.Configura
         filename: `${appName}.html`,
         template: htmlTemplate,
         inject: true,
+      }),
+
+      new CircularDependencyPlugin({
+        cwd: __dirname,
+        exclude: /node_modules/,
+        failOnError: true,
       }),
 
       new MiniCssExtractPlugin({
