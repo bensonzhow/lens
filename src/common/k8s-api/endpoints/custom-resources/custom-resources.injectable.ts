@@ -19,18 +19,16 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { when } from "mobx";
-import { catalogCategoryRegistry } from "../../../common/catalog";
-import { catalogEntityRegistry } from "../../../renderer/api/catalog-entity-registry";
-import { isActiveRoute } from "../../../renderer/navigation";
+import { Injectable, lifecycleEnum } from "@ogre-tools/injectable";
+import { computed } from "mobx";
+import { crdStore } from "../../../../renderer/components/+custom-resources/crd.store";
 
-export async function setEntityOnRouteMatch() {
-  await when(() => catalogEntityRegistry.entities.size > 0);
+const instantiateCustomResourcesInjectable = () => computed(() => crdStore.items);
 
-  const entities = catalogEntityRegistry.getItemsForCategory(catalogCategoryRegistry.getByName("General"));
-  const activeEntity = entities.find(entity => isActiveRoute(entity.spec.path));
+const customResourceDefinitionsInjectable: Injectable<ReturnType<typeof instantiateCustomResourcesInjectable>> = {
+  getDependencies: () => undefined,
+  instantiate: instantiateCustomResourcesInjectable,
+  lifecycle: lifecycleEnum.singleton,
+};
 
-  if (activeEntity) {
-    catalogEntityRegistry.activeEntity = activeEntity;
-  }
-}
+export default customResourceDefinitionsInjectable;
