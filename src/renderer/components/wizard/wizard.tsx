@@ -43,12 +43,12 @@ export interface WizardProps extends WizardCommonProps {
   onChange?: (step: number) => void;
 }
 
-interface State {
+export interface WizardState {
   step?: number;
 }
 
-export class Wizard extends React.Component<WizardProps, State> {
-  public state: State = {
+export class Wizard extends React.Component<WizardProps, WizardState> {
+  public state: WizardState = {
     step: this.getValidStep(this.props.step),
   };
 
@@ -146,7 +146,7 @@ export interface WizardStepProps<D = any> extends WizardCommonProps<D> {
   scrollable?: boolean;
 }
 
-interface WizardStepState {
+export interface WizardStepState {
   waiting?: boolean;
 }
 

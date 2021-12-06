@@ -22,7 +22,7 @@
 import { autoBind, noop } from "../../utils";
 import { DockTabStore } from "./dock-tab.store";
 import { autorun, IReactionDisposer } from "mobx";
-import { dockStore, DockTab, DockTabCreateSpecific, TabId, TabKind } from "./dock.store";
+import { dockStore, DockTab, DockTabCreateOption, TabId, TabKind } from "./dock.store";
 import type { KubeObject } from "../../../common/k8s-api/kube-object";
 import { apiManager } from "../../../common/k8s-api/api-manager";
 import type { KubeObjectStore } from "../../../common/k8s-api/kube-object.store";
@@ -120,7 +120,7 @@ export class EditResourceStore extends DockTabStore<EditingResource> {
 
 export const editResourceStore = new EditResourceStore();
 
-export function editResourceTab(object: KubeObject, tabParams: DockTabCreateSpecific = {}) {
+export function editResourceTab(object: KubeObject, tabParams: DockTabCreateOption = {}) {
   // use existing tab if already opened
   let tab = editResourceStore.getTabByResource(object);
 

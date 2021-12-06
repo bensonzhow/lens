@@ -93,7 +93,7 @@ export function getMetricsForDeployments(deployments: Deployment[], namespace: s
   });
 }
 
-interface IContainerProbe {
+export interface IContainerProbe {
   httpGet?: {
     path?: string;
     port: number;
@@ -240,14 +240,11 @@ export class Deployment extends WorkloadKubeObject {
   }
 }
 
-let deploymentApi: DeploymentApi;
-
-if (isClusterPageContext()) {
-  deploymentApi = new DeploymentApi({
+/**
+ * Only available within kubernetes cluster pages
+ */
+export const deploymentApi = isClusterPageContext()
+  ? new DeploymentApi({
     objectConstructor: Deployment,
-  });
-}
-
-export {
-  deploymentApi,
-};
+  })
+  : undefined;

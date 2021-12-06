@@ -24,7 +24,7 @@
 import type React from "react";
 import { BaseRegistry } from "./base-registry";
 
-interface StatusBarComponents {
+export interface StatusBarComponents {
   Item?: React.ComponentType;
   /**
    * The side of the bottom bar to place this component.
@@ -40,7 +40,7 @@ interface StatusBarRegistrationV2 {
 
 export interface StatusBarRegistration extends StatusBarRegistrationV2 {
   /**
-   * @deprecated use components.Item instead
+   * @deprecated use `.components.Item` instead
    */
   item?: React.ReactNode;
 }

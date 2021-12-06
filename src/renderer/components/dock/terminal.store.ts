@@ -23,7 +23,7 @@ import { autorun, observable, when } from "mobx";
 import { autoBind, noop, Singleton } from "../../utils";
 import { Terminal } from "./terminal";
 import { TerminalApi, TerminalChannels } from "../../api/terminal-api";
-import { dockStore, DockTab, DockTabCreateSpecific, TabId, TabKind } from "./dock.store";
+import { dockStore, DockTab, DockTabCreateOption, TabId, TabKind } from "./dock.store";
 import { WebSocketApiState } from "../../api/websocket-api";
 import { Notifications } from "../notifications";
 
@@ -31,7 +31,7 @@ export interface ITerminalTab extends DockTab {
   node?: string; // activate node shell mode
 }
 
-export function createTerminalTab(tabParams: DockTabCreateSpecific = {}) {
+export function createTerminalTab(tabParams: DockTabCreateOption = {}) {
   return dockStore.createTab({
     title: `Terminal`,
     ...tabParams,
@@ -39,9 +39,15 @@ export function createTerminalTab(tabParams: DockTabCreateSpecific = {}) {
   });
 }
 
+export interface SendCommandOptions {
+  enter?: boolean;
+  newTab?: boolean;
+  tabId?: TabId;
+}
+
 export class TerminalStore extends Singleton {
-  protected terminals = new Map<TabId, Terminal>();
-  protected connections = observable.map<TabId, TerminalApi>();
+  private terminals = new Map<TabId, Terminal>();
+  private connections = observable.map<TabId, TerminalApi>();
 
   constructor() {
     super();
@@ -107,7 +113,7 @@ export class TerminalStore extends Singleton {
     return this.connections.get(tabId)?.readyState === WebSocketApiState.CLOSED;
   }
 
-  async sendCommand(command: string, options: { enter?: boolean; newTab?: boolean; tabId?: TabId } = {}) {
+  async sendCommand(command: string, options: SendCommandOptions = {}) {
     const { enter, newTab, tabId } = options;
 
     if (tabId) {

@@ -72,14 +72,11 @@ export function getMetricsForNamespace(namespace: string, selector = ""): Promis
   });
 }
 
-let namespacesApi: NamespaceApi;
-
-if (isClusterPageContext()) {
-  namespacesApi = new NamespaceApi({
+/**
+ * Only available within kubernetes cluster pages
+ */
+export const namespacesApi = isClusterPageContext()
+  ? new NamespaceApi({
     objectConstructor: Namespace,
-  });
-}
-
-export {
-  namespacesApi,
-};
+  })
+  : undefined;

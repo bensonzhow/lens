@@ -20,16 +20,18 @@
  */
 
 import type React from "react";
+import type { KubeObject } from "../../common/k8s-api/kube-object";
+import type { KubeObjectMenuProps } from "../renderer-api/components";
 import { BaseRegistry } from "./base-registry";
 
-export interface KubeObjectMenuComponents {
-  MenuItem: React.ComponentType<any>;
+export interface KubeObjectMenuComponents<T extends KubeObject> {
+  MenuItem: React.ComponentType<KubeObjectMenuProps<T>>;
 }
 
-export interface KubeObjectMenuRegistration {
+export interface KubeObjectMenuRegistration<T extends KubeObject = KubeObject> {
   kind: string;
   apiVersions: string[];
-  components: KubeObjectMenuComponents;
+  components: KubeObjectMenuComponents<T>;
 }
 
 export class KubeObjectMenuRegistry extends BaseRegistry<KubeObjectMenuRegistration> {

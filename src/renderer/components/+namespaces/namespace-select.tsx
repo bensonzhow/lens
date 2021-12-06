@@ -29,22 +29,22 @@ import { cssNames } from "../../utils";
 import { Icon } from "../icon";
 import { namespaceStore } from "./namespace.store";
 
-interface Props extends SelectProps {
+export interface NamespaceSelectProps extends SelectProps {
   showIcons?: boolean;
   sort?: (a: SelectOption<string>, b: SelectOption<string>) => number;
   showAllNamespacesOption?: boolean; // show "All namespaces" option on the top (default: false)
   customizeOptions?(options: SelectOption[]): SelectOption[];
 }
 
-const defaultProps: Partial<Props> = {
+const defaultProps: Partial<NamespaceSelectProps> = {
   showIcons: true,
 };
 
 @observer
-export class NamespaceSelect extends React.Component<Props> {
+export class NamespaceSelect extends React.Component<NamespaceSelectProps> {
   static defaultProps = defaultProps as object;
 
-  constructor(props: Props) {
+  constructor(props: NamespaceSelectProps) {
     super(props);
     makeObservable(this);
   }

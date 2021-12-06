@@ -21,10 +21,29 @@
 
 import { EventEmitter } from "./event-emitter";
 
-export type AppEvent = {
+/**
+ * A generic event that has happened within the Lens
+ */
+export interface AppEvent {
+  /**
+   * The category of actions that took place.
+   */
   name: string;
-  action: string;
-  params?: object;
-};
 
+  /**
+   * The specific action that took place.
+   */
+  action: string;
+
+  /**
+   * Any other data pertaining to the event.
+   */
+  params?: object;
+}
+
+export type { EventEmitter };
+
+/**
+ * The emitter instance for events within Lens.
+ */
 export const appEventBus = new EventEmitter<[AppEvent]>();

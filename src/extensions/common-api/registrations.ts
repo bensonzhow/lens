@@ -25,5 +25,14 @@ export type { KubeObjectMenuRegistration, KubeObjectMenuComponents } from "../re
 export type { KubeObjectStatusRegistration } from "../registries/kube-object-status-registry";
 export type { PageRegistration, RegisteredPage, PageParams, PageComponentProps, PageComponents, PageTarget } from "../registries/page-registry";
 export type { ClusterPageMenuRegistration, ClusterPageMenuComponents } from "../registries/page-menu-registry";
-export type { StatusBarRegistration } from "../registries/status-bar-registry";
+export type { StatusBarRegistration, StatusBarComponents } from "../registries/status-bar-registry";
+export type { MenuRegistration } from "../../main/menu/menu-registration";
+export type { MenuTopId } from "../../main/menu/menu";
+export type { CatalogEntityDetailRegistration, CatalogEntityDetailsProps, CatalogEntityDetailComponents } from "../registries/catalog-entity-detail-registry";
 export type { ProtocolHandlerRegistration, RouteParams as ProtocolRouteParams, RouteHandler as ProtocolRouteHandler } from "../registries/protocol-handler";
+export type { CommandRegistration, CommandContext } from "../registries/command-registry";
+export type { EntitySettingRegistration, EntitySettingViewProps, EntitySettingComponents } from "../registries/entity-setting-registry";
+export type { WorkloadsOverviewDetailRegistration, WorkloadsOverviewDetailComponents } from "../registries/workloads-overview-detail-registry";
+export type { TopBarRegistration, TopBarComponents } from "../registries/topbar-registry";
+export type { WelcomeBannerRegistration } from "../registries/welcome-banner-registry";
+export type { WelcomeMenuRegistration } from "../registries/welcome-menu-registry";

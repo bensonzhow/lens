@@ -68,6 +68,9 @@ export class VirtualList extends Component<Props, State> {
 
   private listRef = React.createRef<VariableSizeList>();
 
+  /**
+   * @internal
+   */
   public state: State = {
     overscanCount: this.props.initialOffset,
   };

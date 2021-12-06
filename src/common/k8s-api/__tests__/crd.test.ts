@@ -19,7 +19,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { CustomResourceDefinition } from "../endpoints";
+import { CustomResourceDefinition, CustomResourceDefinitionSpec } from "../endpoints";
 
 describe("Crds", () => {
   describe("getVersion", () => {
@@ -45,7 +45,7 @@ describe("Crds", () => {
               storage: false,
             },
           ],
-        },
+        } as CustomResourceDefinitionSpec,
       });
 
       expect(() => crd.getVersion()).toThrowError("Failed to find a version for CustomResourceDefinition foo");
@@ -73,7 +73,7 @@ describe("Crds", () => {
               storage: false,
             },
           ],
-        },
+        } as CustomResourceDefinitionSpec,
       });
 
       expect(crd.getVersion()).toBe("123");
@@ -101,7 +101,7 @@ describe("Crds", () => {
               storage: false,
             },
           ],
-        },
+        } as CustomResourceDefinitionSpec,
       });
 
       expect(crd.getVersion()).toBe("123");
@@ -130,7 +130,7 @@ describe("Crds", () => {
               storage: false,
             },
           ],
-        },
+        } as CustomResourceDefinitionSpec,
       });
 
       expect(crd.getVersion()).toBe("123");
@@ -147,7 +147,7 @@ describe("Crds", () => {
         },
         spec: {
           version: "abc",
-        },
+        } as CustomResourceDefinitionSpec,
       });
 
       expect(crd.getVersion()).toBe("abc");

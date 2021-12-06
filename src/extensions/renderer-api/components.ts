@@ -19,6 +19,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { SendCommandOptions, TerminalStore } from "../../renderer/components/dock/terminal.store";
+
 // layouts
 export * from "../../renderer/components/layout/main-layout";
 export * from "../../renderer/components/layout/setting-layout";
@@ -32,8 +34,24 @@ export * from "../../renderer/components/checkbox";
 export * from "../../renderer/components/radio";
 export * from "../../renderer/components/select";
 export * from "../../renderer/components/slider";
-export * from "../../renderer/components/switch";
-export * from "../../renderer/components/input/input";
+export { FormSwitch, Switcher } from "../../renderer/components/switch";
+export type { SwitcherProps, SwitcherStyles } from "../../renderer/components/switch";
+export {
+  Input,
+  InputValidators,
+  SearchInput,
+} from "../../renderer/components/input";
+export type {
+  IconData,
+  IconDataFnArg,
+  InputElement,
+  InputElementProps,
+  InputProps,
+  InputState,
+  InputValidator,
+  SearchInputProps,
+  SearchInputUrlProps,
+} from "../../renderer/components/input";
 
 // command-overlay
 export { CommandOverlay } from "../../renderer/components/command-palette";
@@ -57,19 +75,68 @@ export * from "../../renderer/components/+workloads-pods/pod-details-list";
 export * from "../../renderer/components/+namespaces/namespace-select";
 export * from "../../renderer/components/+namespaces/namespace-select-filter";
 export * from "../../renderer/components/layout/sub-title";
-export * from "../../renderer/components/input/search-input";
-export * from "../../renderer/components/chart/bar-chart";
-export * from "../../renderer/components/chart/pie-chart";
+export * from "../../renderer/components/chart";
 
 // kube helpers
 export * from "../../renderer/components/kube-detail-params";
 export * from "../../renderer/components/kube-object-details";
 export * from "../../renderer/components/kube-object-list-layout";
+export type { AddRemoveButtonsProps } from "../../renderer/components/add-remove-buttons";
+export type { IClassName } from "../../renderer/utils";
+export type {
+  HeaderCustomizer,
+  ItemsFilters,
+  ItemsFilter,
+  SearchFilter,
+  SearchFilters,
+  HeaderPlaceholders,
+  ItemListLayout,
+  ItemListLayoutProps,
+} from "../../renderer/components/item-object-list";
 export * from "../../renderer/components/kube-object-menu";
 export * from "../../renderer/components/kube-object-meta";
 export * from "../../renderer/components/+events/kube-event-details";
 
 // specific exports
 export * from "../../renderer/components/status-brick";
-export { terminalStore, createTerminalTab, TerminalStore } from "../../renderer/components/dock/terminal.store";
-export { logTabStore } from "../../renderer/components/dock/log-tab.store";
+
+export {
+  createTerminalTab,
+} from "../../renderer/components/dock/terminal.store";
+export type {
+  SendCommandOptions,
+} from "../../renderer/components/dock/terminal.store";
+
+export {
+  logTabStore,
+} from "../../renderer/components/dock/log-tab.store";
+export type {
+  LogTabStore,
+  LogTabData,
+  PodLogsTabData,
+  WorkloadLogsTabData,
+} from "../../renderer/components/dock/log-tab.store";
+
+export {
+  TabKind,
+} from "../../renderer/components/dock/dock.store";
+export type {
+  TabId,
+  DockTabCreateOption,
+  BaseDockTabCreateOptions,
+} from "../../renderer/components/dock/dock.store";
+
+export type {
+  DockTabStorageState,
+} from "../../renderer/components/dock/dock-tab.store";
+
+export const terminalStore = {
+  /**
+   * @deprecated use {@link sendTerminalCommand} instead
+   */
+  sendCommand: sendTerminalCommand,
+};
+
+export function sendTerminalCommand(command: string, opts?: SendCommandOptions) {
+  return TerminalStore.getInstance().sendCommand(command, opts);
+}

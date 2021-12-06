@@ -60,6 +60,9 @@ export interface JsonApiConfig {
 const httpAgent = new HttpAgent({ keepAlive: true });
 const httpsAgent = new HttpsAgent({ keepAlive: true });
 
+/**
+ * The base type used for communicating with a JSON returning API server
+ */
 export class JsonApi<D = JsonApiData, P extends JsonApiParams = JsonApiParams> {
   static reqInitDefault: RequestInit = {
     headers: {
@@ -80,7 +83,7 @@ export class JsonApi<D = JsonApiData, P extends JsonApiParams = JsonApiParams> {
 
   public onData = new EventEmitter<[D, Response]>();
   public onError = new EventEmitter<[JsonApiErrorParsed, Response]>();
-  
+
   private getRequestOptions: JsonApiConfig["getRequestOptions"];
 
   get<T = D>(path: string, params?: P, reqInit: RequestInit = {}) {
@@ -215,6 +218,9 @@ export class JsonApi<D = JsonApiData, P extends JsonApiParams = JsonApiParams> {
   }
 }
 
+/**
+ * The pseudo-error type that is throw when there are errors from a request
+ */
 export class JsonApiErrorParsed {
   isUsedForNotification = false;
 

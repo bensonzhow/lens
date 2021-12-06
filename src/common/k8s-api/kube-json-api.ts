@@ -19,7 +19,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { JsonApi, JsonApiData, JsonApiError } from "./json-api";
+import { JsonApi, JsonApiError } from "./json-api";
 import type { Response } from "node-fetch";
 import { LensProxy } from "../../main/lens-proxy";
 import { apiKubePrefix, isDebugging } from "../vars";
@@ -54,10 +54,12 @@ export interface KubeJsonApiMetadata {
   [key: string]: any;
 }
 
-export interface KubeJsonApiData extends JsonApiData {
+export interface KubeJsonApiData<Metadata extends KubeJsonApiMetadata = KubeJsonApiMetadata, Status = {}, Spec = {}> {
   kind: string;
   apiVersion: string;
-  metadata: KubeJsonApiMetadata;
+  metadata: Metadata;
+  status?: Status;
+  spec?: Spec;
 }
 
 export interface KubeJsonApiError extends JsonApiError {

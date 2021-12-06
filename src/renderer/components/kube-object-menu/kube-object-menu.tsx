@@ -40,7 +40,7 @@ export interface KubeObjectMenuProps<TKubeObject extends KubeObject> extends Men
 
 interface Dependencies {
   apiManager: ApiManager;
-  kubeObjectMenuItems: React.ElementType[];
+  kubeObjectMenuItems: React.ComponentType<KubeObjectMenuProps<KubeObject>>[];
   clusterName: string;
   hideDetails: () => void;
   editResourceTab: (kubeObject: KubeObject) => void;

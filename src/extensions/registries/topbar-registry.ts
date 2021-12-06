@@ -22,7 +22,7 @@
 import type React from "react";
 import { BaseRegistry } from "./base-registry";
 
-interface TopBarComponents {
+export interface TopBarComponents {
   Item: React.ComponentType;
 }
 

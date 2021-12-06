@@ -51,6 +51,9 @@ const defaultProps: Partial<KubeObjectListLayoutProps<KubeObject>> = {
 @observer
 export class KubeObjectListLayout<K extends KubeObject> extends React.Component<KubeObjectListLayoutProps<K>> {
   static defaultProps = defaultProps as object;
+  /**
+   * @internal
+   */
   static clusterContext: ClusterContext;
 
   constructor(props: KubeObjectListLayoutProps<K>) {

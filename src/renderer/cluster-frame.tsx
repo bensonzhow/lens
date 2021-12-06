@@ -134,14 +134,12 @@ export class ClusterFrame extends React.Component {
       unmountComponentAtNode(rootElem);
     };
 
-    const clusterContext = new FrameContext(cluster);
-
     // Setup hosted cluster context
-    KubeObjectStore.defaultContext.set(clusterContext);
-    WorkloadsOverview.clusterContext
+    KubeObjectStore.defaultContext
+      = WorkloadsOverview.clusterContext
       = KubeObjectListLayout.clusterContext
       = KubeWatchApi.context
-      = clusterContext;
+      = new FrameContext(cluster);
   }
 
   componentDidMount() {

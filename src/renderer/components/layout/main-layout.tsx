@@ -28,7 +28,7 @@ import { ErrorBoundary } from "../error-boundary";
 import { ResizeDirection, ResizeGrowthDirection, ResizeSide, ResizingAnchor } from "../resizing-anchor";
 import { defaultSidebarWidth, sidebarStorage } from "./sidebar-storage";
 
-interface Props {
+export interface MainLayoutProps {
   sidebar: React.ReactNode;
   className?: string;
   footer?: React.ReactNode;
@@ -40,7 +40,7 @@ interface Props {
  * @link https://api-docs.k8slens.dev/master/extensions/capabilities/common-capabilities/#global-pages
  */
 @observer
-export class MainLayout extends React.Component<Props> {
+export class MainLayout extends React.Component<MainLayoutProps> {
   onSidebarResize = (width: number) => {
     sidebarStorage.merge({ width });
   };

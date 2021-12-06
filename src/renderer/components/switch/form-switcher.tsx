@@ -36,14 +36,12 @@ const useStyles = makeStyles({
 });
 
 export function FormSwitch(props: FormControlLabelProps) {
-  const classes = useStyles();
-
   return (
     <FormControlLabel
       control={props.control}
       labelPlacement="start"
       label={props.label}
-      className={classes.root}
+      className={useStyles().root}
     />
   );
 }

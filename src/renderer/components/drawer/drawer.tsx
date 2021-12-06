@@ -58,7 +58,7 @@ const defaultProps: Partial<DrawerProps> = {
   onClose: noop,
 };
 
-interface State {
+export interface DrawerState {
   isCopied: boolean;
   width: number;
 }
@@ -75,7 +75,7 @@ const drawerStorage = createStorage("drawer", {
   width: defaultDrawerWidth,
 });
 
-export class Drawer extends React.Component<DrawerProps, State> {
+export class Drawer extends React.Component<DrawerProps, DrawerState> {
   static defaultProps = defaultProps as object;
 
   private mouseDownTarget: HTMLElement;

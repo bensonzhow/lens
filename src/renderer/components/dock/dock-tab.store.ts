@@ -31,16 +31,26 @@ export interface DockTabStoreOptions {
 export type DockTabStorageState<T> = Record<TabId, T>;
 
 export class DockTabStore<T> {
+  /**
+   * @internal
+   */
   protected storage?: StorageHelper<DockTabStorageState<T>>;
+
+  /**
+   * @internal
+   */
   protected data = observable.map<TabId, T>();
 
-  constructor(protected options: DockTabStoreOptions = {}) {
+  /**
+   * @internal
+   */
+  protected options: DockTabStoreOptions;
+
+  constructor(options: DockTabStoreOptions = {}) {
     autoBind(this);
 
-    this.options = {
-      autoInit: true,
-      ...this.options,
-    };
+    this.options = options;
+    this.options.autoInit ??= true;
 
     if (this.options.autoInit) {
       this.init();

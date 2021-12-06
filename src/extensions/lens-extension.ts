@@ -27,18 +27,45 @@ import type { ProtocolHandlerRegistration } from "./registries";
 import type { PackageJson } from "type-fest";
 import { Disposer, disposer } from "../common/utils";
 
-export type LensExtensionId = string; // path to manifest (package.json)
+/**
+ * A named type for when functions should expect an extension's ID
+ */
+export type LensExtensionId = string;
 export type LensExtensionConstructor = new (...args: ConstructorParameters<typeof LensExtension>) => LensExtension;
 
+/**
+ * The required fields that an extension's `package.json` must include
+ */
 export interface LensExtensionManifest extends PackageJson {
+  /**
+   * The name of the extension
+   */
   name: string;
+
+  /**
+   * The SemVer version string
+   */
   version: string;
-  main?: string; // path to %ext/dist/main.js
-  renderer?: string; // path to %ext/dist/renderer.js
+
+  /**
+   * The path to compiled JS file for the main side of the extension.
+   */
+  main?: string;
+
+  /**
+   * The path to compiled JS file for the renderer side of the extension.
+   */
+  renderer?: string;
 }
 
+/**
+ * @internal
+ */
 export const Disposers = Symbol();
 
+/**
+ * The base class for all extensions.
+ */
 export class LensExtension {
   readonly id: LensExtensionId;
   readonly manifest: LensExtensionManifest;
@@ -53,6 +80,9 @@ export class LensExtension {
     return this._isEnabled;
   }
 
+  /**
+   * @internal
+   */
   [Disposers] = disposer();
 
   constructor({ id, manifest, manifestPath, isBundled }: InstalledExtension) {

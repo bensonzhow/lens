@@ -84,7 +84,7 @@ export interface ItemListLayoutProps<I extends ItemObject> {
   tableProps?: Partial<TableProps<I>>; // low-level table configuration
   renderTableHeader: TableCellProps[] | null;
   renderTableContents: (item: I) => (ReactNode | TableCellProps)[];
-  renderItemMenu?: (item: I, store: ItemStore<I>) => ReactNode;
+  renderItemMenu?: (item: I) => ReactNode;
   customizeTableRowProps?: (item: I) => Partial<TableRowProps>;
   addRemoveButtons?: Partial<AddRemoveButtonsProps>;
   virtual?: boolean;
@@ -199,7 +199,7 @@ export class ItemListLayout<I extends ItemObject> extends React.Component<ItemLi
     return this.props.store.failedLoading;
   }
 
-  @computed get filters() {
+  @computed private get filters() {
     let { activeFilters } = pageFilters;
     const { searchFilters } = this.props;
 
@@ -284,7 +284,7 @@ export class ItemListLayout<I extends ItemObject> extends React.Component<ItemLi
         {renderItemMenu && (
           <TableCell className="menu">
             <div onClick={stopPropagation}>
-              {renderItemMenu(item, store)}
+              {renderItemMenu(item)}
             </div>
           </TableCell>
         )}

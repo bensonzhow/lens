@@ -59,6 +59,16 @@ interface Dependencies {
   installOnDrop: (files: File[]) => Promise<void>;
 }
 
+interface Dependencies {
+  userExtensions: IComputedValue<InstalledExtension[]>;
+  enableExtension: (id: LensExtensionId) => void;
+  disableExtension: (id: LensExtensionId) => void;
+  confirmUninstallExtension: (extension: InstalledExtension) => Promise<void>;
+  installFromInput: (input: string) => Promise<void>;
+  installFromSelectFileDialog: () => Promise<void>;
+  installOnDrop: (files: File[]) => Promise<void>;
+}
+
 @observer
 class NonInjectedExtensions extends React.Component<Dependencies> {
   @observable installPath = "";

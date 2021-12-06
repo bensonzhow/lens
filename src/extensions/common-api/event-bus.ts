@@ -21,3 +21,4 @@
 
 export { appEventBus } from "../../common/event-bus";
 export type { AppEvent } from "../../common/event-bus";
+export type { EventEmitter, AddListenerOptions, EventListener } from "../../common/event-emitter";

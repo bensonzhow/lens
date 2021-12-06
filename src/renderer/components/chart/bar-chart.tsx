@@ -31,18 +31,26 @@ import { ZebraStripes } from "./zebra-stripes.plugin";
 import { ThemeStore } from "../../theme.store";
 import { NoMetrics } from "../resource-metrics/no-metrics";
 
-interface Props extends ChartProps {
+export interface BarChartProps extends ChartProps {
+  /**
+   * The name of the chart
+   */
   name?: string;
-  timeLabelStep?: number;  // Minute labels appearance step
+
+  /**
+   * The step between the minute labels
+   * @default 10
+   */
+  timeLabelStep?: number;
 }
 
-const defaultProps: Partial<Props> = {
+const defaultProps: Partial<BarChartProps> = {
   timeLabelStep: 10,
   plugins: [ZebraStripes],
 };
 
 @observer
-export class BarChart extends React.Component<Props> {
+export class BarChart extends React.Component<BarChartProps> {
   static defaultProps = defaultProps as object;
 
   render() {

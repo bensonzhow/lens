@@ -43,13 +43,12 @@ export interface DialogProps {
   animated?: boolean;
   "data-testid"?: string;
 }
-
-interface DialogState {
+export interface DialogState {
   isOpen: boolean;
 }
 
 @observer
-export class Dialog extends React.PureComponent<DialogProps, DialogState> {
+export class Dialog extends React.Component<DialogProps, DialogState> {
   private contentElem: HTMLElement;
   ref = React.createRef<HTMLDivElement>();
 
@@ -67,6 +66,9 @@ export class Dialog extends React.PureComponent<DialogProps, DialogState> {
   @disposeOnUnmount
   closeOnNavigate = reaction(() => navigation.toString(), () => this.close());
 
+  /**
+   * @internal
+   */
   public state: DialogState = {
     isOpen: this.props.isOpen,
   };

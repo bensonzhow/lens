@@ -24,10 +24,10 @@ import { reaction } from "mobx";
 import { podsStore } from "../+workloads-pods/pods.store";
 
 import { IPodContainer, Pod } from "../../../common/k8s-api/endpoints";
-import type { WorkloadKubeObject } from "../../../common/k8s-api/workload-kube-object";
+import type { KubeObject } from "../../../common/k8s-api/kube-object";
 import logger from "../../../common/logger";
 import { DockTabStore } from "./dock-tab.store";
-import { dockStore, DockTabCreateSpecific, TabKind } from "./dock.store";
+import { dockStore, DockTabCreateOption, TabKind } from "./dock.store";
 
 export interface LogTabData {
   pods: Pod[];
@@ -37,16 +37,22 @@ export interface LogTabData {
   previous?: boolean
 }
 
-interface PodLogsTabData {
+export interface PodLogsTabData {
   selectedPod: Pod
   selectedContainer: IPodContainer
 }
 
-interface WorkloadLogsTabData {
-  workload: WorkloadKubeObject
+export interface WorkloadLogsTabData {
+  workload: KubeObject;
 }
 
+/**
+ * The storage manager for Log Dock Tabs
+ */
 export class LogTabStore extends DockTabStore<LogTabData> {
+  /**
+   * @internal
+   */
   constructor() {
     super({
       storageKey: "pod_logs",
@@ -89,12 +95,12 @@ export class LogTabStore extends DockTabStore<LogTabData> {
     dockStore.renameTab(tabId, `Pod ${selectedPod.metadata.name}`);
   }
 
-  private createDockTab(tabParams: DockTabCreateSpecific) {
+  private createDockTab(tabParams: DockTabCreateOption) {
     dockStore.createTab({
       ...tabParams,
       kind: TabKind.POD_LOGS,
     }, false);
-  } 
+  }
 
   private createLogsTab(title: string, data: LogTabData): string {
     const id = uniqueId("log-tab-");
@@ -121,7 +127,7 @@ export class LogTabStore extends DockTabStore<LogTabData> {
         const isSelectedPodInList = pods.find(item => item.getId() == pod.getId());
         const selectedPod = isSelectedPodInList ? pod : pods[0];
         const selectedContainer = isSelectedPodInList ? tabData.selectedContainer : pod.getAllContainers()[0];
-  
+
         if (pods.length > 0) {
           this.setData(tabId, {
             ...tabData,
@@ -129,7 +135,7 @@ export class LogTabStore extends DockTabStore<LogTabData> {
             selectedContainer,
             pods,
           });
-  
+
           this.renameTab(tabId);
         } else {
           this.closeTab(tabId);

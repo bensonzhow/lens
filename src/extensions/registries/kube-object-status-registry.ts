@@ -19,8 +19,20 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import type { KubeObject, KubeObjectStatus } from "../renderer-api/k8s-api";
+import type { KubeObject } from "../renderer-api/k8s-api";
 import { BaseRegistry } from "./base-registry";
+
+export enum KubeObjectStatusLevel {
+  INFO = 1,
+  WARNING = 2,
+  CRITICAL = 3,
+}
+
+export interface KubeObjectStatus {
+  level: KubeObjectStatusLevel;
+  text: string;
+  timestamp?: string;
+}
 
 export interface KubeObjectStatusRegistration {
   kind: string;

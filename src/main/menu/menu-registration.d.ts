@@ -19,7 +19,14 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 import type { MenuItemConstructorOptions } from "electron";
+import type { MenuTopId } from "../../main/menu";
 
+/**
+ * A declaration for adding items to the application menu
+ */
 export interface MenuRegistration extends MenuItemConstructorOptions {
-  parentId: string;
+  /**
+   * The ID of the top level menu.
+   */
+  parentId: MenuTopId;
 }

@@ -25,9 +25,9 @@ import { observable, makeObservable } from "mobx";
 import { once } from "lodash";
 import { iter, Disposer } from "../utils";
 
-type ExtractEntityMetadataType<Entity> = Entity extends CatalogEntity<infer Metadata> ? Metadata : never;
-type ExtractEntityStatusType<Entity> = Entity extends CatalogEntity<any, infer Status> ? Status : never;
-type ExtractEntitySpecType<Entity> = Entity extends CatalogEntity<any, any, infer Spec> ? Spec : never;
+export type ExtractEntityMetadataType<Entity> = Entity extends CatalogEntity<infer Metadata> ? Metadata : never;
+export type ExtractEntityStatusType<Entity> = Entity extends CatalogEntity<any, infer Status> ? Status : never;
+export type ExtractEntitySpecType<Entity> = Entity extends CatalogEntity<any, any, infer Spec> ? Spec : never;
 
 export type CatalogEntityConstructor<Entity extends CatalogEntity> = (
   (new (data: CatalogEntityData<
@@ -55,12 +55,35 @@ export interface CatalogCategorySpec {
  */
 export type AddMenuFilter = (menu: CatalogEntityAddMenu) => any;
 
+/**
+ * The events that can be emitted onto a catalog category
+ */
 export interface CatalogCategoryEvents {
+  /**
+   * An event which is emitted when the category becomes active on the catalog
+   * view.
+   */
   load: () => void;
+
+  /**
+   * An event which is emitted when the menu for adding new catalog entities
+   * is opened.
+   * @param context The event context
+   */
   catalogAddMenu: (context: CatalogEntityAddMenuContext) => void;
+
+  /**
+   * An event which is emitted when the context menu on a entity versioned by
+   * this category is opened.
+   * @param entity The entity that was opened
+   * @param context The event context
+   */
   contextMenuOpen: (entity: CatalogEntity, context: CatalogEntityContextMenuContext) => void;
 }
 
+/**
+ * A declartion of supported versions a specific kind of CatalogEntity
+ */
 export abstract class CatalogCategory extends (EventEmitter as new () => TypedEmitter<CatalogCategoryEvents>) {
   abstract readonly apiVersion: string;
   abstract readonly kind: string;
@@ -120,6 +143,9 @@ export interface CatalogEntityMetadata {
   [key: string]: string | object;
 }
 
+/**
+ * The minimal information that all entities must use to describe their current status
+ */
 export interface CatalogEntityStatus {
   phase: string;
   reason?: string;
@@ -132,59 +158,104 @@ export interface CatalogEntityStatus {
   active?: boolean;
 }
 
+/**
+ * The event context for when an entity is activated
+ */
 export interface CatalogEntityActionContext {
-  navigate: (url: string) => void;
-  setCommandPaletteContext: (context?: CatalogEntity) => void;
+  /**
+   * A function to navigate around the application
+   * @param pathname The path to navigate to
+   */
+  navigate: (pathname: string) => void;
+
+  /**
+   * A function to change the active entity for the command palette
+   */
+  setCommandPaletteContext: (entity?: CatalogEntity) => void;
 }
 
+/**
+ * The descriptor for entities' context menus and detail panels' topbars
+ */
 export interface CatalogEntityContextMenu {
   /**
-   * Menu title
+   * When in a context menu, the text displayed
    */
   title: string;
+
   /**
-   * Menu icon
+   * When in a toolbar the icon's material or svg data
+   *
+   * If not present then this item will not be displayed in the toolbar
    */
   icon?: string;
+
   /**
-   * OnClick handler
+   * The function that will be called when the menu item is clicked
    */
   onClick: () => void | Promise<void>;
+
   /**
-   * Confirm click with a message
+   * If present then a confirmation dialog will be displayed to the user with
+   * the given message before the `onClick` handler is called.
    */
   confirm?: {
     message: string;
   }
 }
 
+/**
+ * The context type for the add menu event in the catalog view
+ */
 export interface CatalogEntityAddMenu extends CatalogEntityContextMenu {
+  /**
+   * The icon's material or svg data for the menu item.
+   */
   icon: string;
+
+  /**
+   * If this menu item should be the default action. If multiple items are
+   * declared as the default one then none are executed.
+   */
   defaultAction?: boolean;
 }
 
-export interface CatalogEntitySettingsMenu {
-  group?: string;
-  title: string;
-  components: {
-    View: React.ComponentType<any>
-  };
-}
-
+/**
+ * The context type for entity context menus and drawer detail topbar menus
+ */
 export interface CatalogEntityContextMenuContext {
   /**
-   * Navigate to the specified pathname
+   * A function to navigate around the application
+   * @param pathname The path to navigate to
    */
   navigate: (pathname: string) => void;
+
+  /**
+   * The output array of items
+   */
   menuItems: CatalogEntityContextMenu[];
 }
 
+/**
+ * @deprecated Not used
+ */
 export interface CatalogEntitySettingsContext {
+  /**
+   * The output array of items
+   */
   menuItems: CatalogEntityContextMenu[];
 }
 
 export interface CatalogEntityAddMenuContext {
+  /**
+   * A function to navigate around the application
+   * @param pathname The path to navigate to
+   */
   navigate: (url: string) => void;
+
+  /**
+   * The output array of items
+   */
   menuItems: CatalogEntityAddMenu[];
 }
 
@@ -225,15 +296,32 @@ export abstract class CatalogEntity<
     this.spec = data.spec;
   }
 
+  /**
+   * A convenience function for getting the entity ID
+   */
   public getId(): string {
     return this.metadata.uid;
   }
 
+  /**
+   * A convenience function for getting the entity name
+   */
   public getName(): string {
     return this.metadata.name;
   }
 
+  /**
+   * The function that will be called when the entity is activated
+   */
   public abstract onRun?(context: CatalogEntityActionContext): void | Promise<void>;
-  public abstract onContextMenuOpen(context: CatalogEntityContextMenuContext): void | Promise<void>;
-  public abstract onSettingsOpen(context: CatalogEntitySettingsContext): void | Promise<void>;
+
+  /**
+   * The function
+   */
+  public abstract onContextMenuOpen?(context: CatalogEntityContextMenuContext): void | Promise<void>;
+
+  /**
+   * @deprecated This is not used. Use the `RenderExtension.entitySettings` field instead
+   */
+  public abstract onSettingsOpen?(context: CatalogEntitySettingsContext): void | Promise<void>;
 }
