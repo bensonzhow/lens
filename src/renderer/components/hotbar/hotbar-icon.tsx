@@ -29,7 +29,6 @@ import { ConfirmDialog } from "../confirm-dialog";
 import { Menu, MenuItem } from "../menu";
 import { observer } from "mobx-react";
 import { Avatar, AvatarProps } from "../avatar";
-import { Icon } from "../icon";
 import { Tooltip } from "../tooltip";
 
 export interface Props extends AvatarProps {
@@ -41,6 +40,7 @@ export interface Props extends AvatarProps {
   menuItems?: CatalogEntityContextMenu[];
   disabled?: boolean;
   tooltip?: string;
+  avatarChildren?: React.ReactNode;
 }
 
 function onMenuItemClick(menuItem: CatalogEntityContextMenu) {
@@ -61,7 +61,7 @@ function onMenuItemClick(menuItem: CatalogEntityContextMenu) {
 }
 
 export const HotbarIcon = observer(({ menuItems = [], size = 40, tooltip, ...props }: Props) => {
-  const { uid, title, src, material, active, className, source, disabled, onMenuOpen, onClick, children, ...rest } = props;
+  const { uid, avatarChildren, material, active, className, source, disabled, onMenuOpen, onClick, children, ...rest } = props;
   const id = `hotbarIcon-${uid}`;
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -75,15 +75,12 @@ export const HotbarIcon = observer(({ menuItems = [], size = 40, tooltip, ...pro
       <Avatar
         {...rest}
         id={id}
-        title={title}
-        colorHash={`${title}-${source}`}
         className={cssNames(styles.avatar, { [styles.active]: active })}
         disabled={disabled}
         size={size}
-        src={src}
         onClick={(event) => !disabled && onClick?.(event)}
       >
-        {material && <Icon material={material} />}
+        {avatarChildren}
       </Avatar>
       {children}
       <Menu

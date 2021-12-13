@@ -53,6 +53,7 @@ import { registerCustomThemes } from "./components/monaco-editor";
 import { getDi } from "./components/getDi";
 import { DiContextProvider } from "@ogre-tools/injectable-react";
 import type { DependencyInjectionContainer } from "@ogre-tools/injectable";
+import { EntityPreferencesStore } from "../common/entity-preferences-store";
 
 if (process.isMainFrame) {
   SentryInit();
@@ -129,6 +130,8 @@ export async function bootstrap(comp: () => Promise<AppComponent>, di: Dependenc
   const clusterStore = ClusterStore.createInstance();
 
   await clusterStore.loadInitialOnRenderer();
+
+  EntityPreferencesStore.createInstance();
 
   // HotbarStore depends on: ClusterStore
   HotbarStore.createInstance();

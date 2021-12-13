@@ -35,6 +35,8 @@ import { groupBy } from "lodash";
 import { SettingLayout } from "../layout/setting-layout";
 import logger from "../../../common/logger";
 import { Avatar } from "../avatar";
+import { getIconColourHash } from "../../../common/catalog/helpers";
+import { EntityIcon } from "../entity-icon";
 
 interface Props extends RouteComponentProps<EntitySettingsRouteParams> {
 }
@@ -97,14 +99,14 @@ export class EntitySettings extends React.Component<Props> {
       <>
         <div className="flex items-center pb-8">
           <Avatar
-            title={this.entity.metadata.name}
-            colorHash={`${this.entity.metadata.name}-${this.entity.metadata.source}`}
-            src={this.entity.spec.icon?.src}
+            colorHash={getIconColourHash(this.entity)}
             className={styles.settingsAvatar}
             size={40}
-          />
+          >
+            <EntityIcon entity={this.entity}/>
+          </Avatar>
           <div className={styles.entityName}>
-            {this.entity.metadata.name}
+            {this.entity.getName()}
           </div>
         </div>
         <Tabs className="flex column" scrollable={false} onChange={this.onTabChange} value={this.activeTab}>

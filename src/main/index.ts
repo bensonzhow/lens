@@ -66,6 +66,7 @@ import { initTray } from "./tray";
 import { kubeApiRequest, shellApiRequest, ShellRequestAuthenticator } from "./proxy-functions";
 import { AppPaths } from "../common/app-paths";
 import { ShellSession } from "./shell-session/shell-session";
+import { EntityPreferencesStore } from "../common/entity-preferences-store";
 
 injectSystemCAs();
 
@@ -161,6 +162,8 @@ app.on("ready", async () => {
 
   // ClusterStore depends on: UserStore
   ClusterStore.createInstance().provideInitialFromMain();
+
+  EntityPreferencesStore.createInstance();
 
   // HotbarStore depends on: ClusterStore
   HotbarStore.createInstance();

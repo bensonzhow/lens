@@ -29,7 +29,6 @@ import { kubernetesClusterCategory } from "../../../common/catalog-entities/kube
 import { catalogCategoryRegistry, CatalogCategoryRegistry, CatalogEntity, CatalogEntityActionContext, CatalogEntityData } from "../../../common/catalog";
 import { CatalogEntityRegistry } from "../../../renderer/api/catalog-entity-registry";
 import { CatalogEntityDetailRegistry } from "../../../extensions/registries";
-import { CatalogEntityItem } from "./catalog-entity-item";
 import { CatalogEntityStore } from "./catalog-entity.store";
 import { AppPaths } from "../../../common/app-paths";
 
@@ -130,11 +129,11 @@ describe("<Catalog />", () => {
     const catalogEntityRegistry = new CatalogEntityRegistry(catalogCategoryRegistry);
     const catalogEntityStore = new CatalogEntityStore(catalogEntityRegistry);
     const onRun = jest.fn();
-    const catalogEntityItem = new CatalogEntityItem(createMockCatalogEntity(onRun), catalogEntityRegistry);
+    const catalogEntityItem = createMockCatalogEntity(onRun);
 
     // mock as if there is a selected item > the detail panel opens
     jest
-      .spyOn(catalogEntityStore, "selectedItem", "get")
+      .spyOn(catalogEntityStore, "selectedEntity", "get")
       .mockImplementation(() => catalogEntityItem);
 
     catalogEntityRegistry.addOnBeforeRun(
@@ -166,11 +165,11 @@ describe("<Catalog />", () => {
     const catalogEntityRegistry = new CatalogEntityRegistry(catalogCategoryRegistry);
     const catalogEntityStore = new CatalogEntityStore(catalogEntityRegistry);
     const onRun = jest.fn();
-    const catalogEntityItem = new CatalogEntityItem(createMockCatalogEntity(onRun), catalogEntityRegistry);
+    const catalogEntityItem = createMockCatalogEntity(onRun);
 
     // mock as if there is a selected item > the detail panel opens
     jest
-      .spyOn(catalogEntityStore, "selectedItem", "get")
+      .spyOn(catalogEntityStore, "selectedEntity", "get")
       .mockImplementation(() => catalogEntityItem);
 
     catalogEntityRegistry.addOnBeforeRun(
@@ -200,11 +199,11 @@ describe("<Catalog />", () => {
     const catalogEntityRegistry = new CatalogEntityRegistry(catalogCategoryRegistry);
     const catalogEntityStore = new CatalogEntityStore(catalogEntityRegistry);
     const onRun = jest.fn();
-    const catalogEntityItem = new CatalogEntityItem(createMockCatalogEntity(onRun), catalogEntityRegistry);
+    const catalogEntityItem = createMockCatalogEntity(onRun);
 
     // mock as if there is a selected item > the detail panel opens
     jest
-      .spyOn(catalogEntityStore, "selectedItem", "get")
+      .spyOn(catalogEntityStore, "selectedEntity", "get")
       .mockImplementation(() => catalogEntityItem);
 
     catalogEntityRegistry.addOnBeforeRun(
@@ -235,11 +234,11 @@ describe("<Catalog />", () => {
     const catalogEntityRegistry = new CatalogEntityRegistry(catalogCategoryRegistry);
     const catalogEntityStore = new CatalogEntityStore(catalogEntityRegistry);
     const onRun = jest.fn(() => done());
-    const catalogEntityItem = new CatalogEntityItem(createMockCatalogEntity(onRun), catalogEntityRegistry);
+    const catalogEntityItem = createMockCatalogEntity(onRun);
 
     // mock as if there is a selected item > the detail panel opens
     jest
-      .spyOn(catalogEntityStore, "selectedItem", "get")
+      .spyOn(catalogEntityStore, "selectedEntity", "get")
       .mockImplementation(() => catalogEntityItem);
 
     catalogEntityRegistry.addOnBeforeRun(
@@ -265,11 +264,11 @@ describe("<Catalog />", () => {
     const catalogEntityRegistry = new CatalogEntityRegistry(catalogCategoryRegistry);
     const catalogEntityStore = new CatalogEntityStore(catalogEntityRegistry);
     const onRun = jest.fn();
-    const catalogEntityItem = new CatalogEntityItem(createMockCatalogEntity(onRun), catalogEntityRegistry);
+    const catalogEntityItem = createMockCatalogEntity(onRun);
 
     // mock as if there is a selected item > the detail panel opens
     jest
-      .spyOn(catalogEntityStore, "selectedItem", "get")
+      .spyOn(catalogEntityStore, "selectedEntity", "get")
       .mockImplementation(() => catalogEntityItem);
 
     catalogEntityRegistry.addOnBeforeRun(
@@ -302,11 +301,11 @@ describe("<Catalog />", () => {
     const catalogEntityRegistry = new CatalogEntityRegistry(catalogCategoryRegistry);
     const catalogEntityStore = new CatalogEntityStore(catalogEntityRegistry);
     const onRun = jest.fn();
-    const catalogEntityItem = new CatalogEntityItem(createMockCatalogEntity(onRun), catalogEntityRegistry);
+    const catalogEntityItem = createMockCatalogEntity(onRun);
 
     // mock as if there is a selected item > the detail panel opens
     jest
-      .spyOn(catalogEntityStore, "selectedItem", "get")
+      .spyOn(catalogEntityStore, "selectedEntity", "get")
       .mockImplementation(() => catalogEntityItem);
 
     catalogEntityRegistry.addOnBeforeRun(

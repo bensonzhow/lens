@@ -27,7 +27,8 @@ import { CatalogEntity } from "./catalog";
 import { catalogEntity } from "../main/catalog-sources/general";
 import logger from "../main/logger";
 import { broadcastMessage, HotbarTooManyItems } from "./ipc";
-import { defaultHotbarCells, getEmptyHotbar, Hotbar, HotbarCreateOptions } from "./hotbar-types";
+import { defaultHotbarCells, getEmptyHotbar, Hotbar, HotbarCreateOptions, HotbarItem } from "./hotbar-types";
+import { getShortName } from "./catalog/helpers";
 
 export interface HotbarStoreModel {
   hotbars: Hotbar[];
@@ -75,10 +76,15 @@ export class HotbarStore extends BaseStore<HotbarStoreModel> {
     if (!data.hotbars || !data.hotbars.length) {
       const hotbar = getEmptyHotbar("Default");
       const { metadata: { uid, name, source }} = catalogEntity;
-      const initialItem = { entity: { uid, name, source }};
 
-      hotbar.items[0] = initialItem;
-
+      hotbar.items[0] = {
+        entity: {
+          uid,
+          name,
+          source,
+          shortName: getShortName(catalogEntity),
+        },
+      };
       this.hotbars = [hotbar];
     } else {
       this.hotbars = data.hotbars;
@@ -154,22 +160,30 @@ export class HotbarStore extends BaseStore<HotbarStoreModel> {
   @action
   addToHotbar(item: CatalogEntity, cellIndex?: number) {
     const hotbar = this.getActive();
-    const uid = item.metadata?.uid;
-    const name = item.metadata?.name;
+    const uid = item.getId();
+    const name = item.getName();
+    const shortName = getShortName(item);
 
     if (typeof uid !== "string") {
-      throw new TypeError("CatalogEntity.metadata.uid must be a string");
+      throw new TypeError("CatalogEntity's id must be a string");
     }
 
     if (typeof name !== "string") {
-      throw new TypeError("CatalogEntity.metadata.name must be a string");
+      throw new TypeError("CatalogEntity's name must be a string");
     }
 
-    const newItem = { entity: {
-      uid,
-      name,
-      source: item.metadata.source,
-    }};
+    if (typeof shortName !== "string") {
+      throw new TypeError("CatalogEntity's shorName must be a string");
+    }
+
+    const newItem: HotbarItem = {
+      entity: {
+        uid,
+        name,
+        source: item.metadata.source,
+        shortName,
+      },
+    };
 
 
     if (this.isAddedToActive(item)) {

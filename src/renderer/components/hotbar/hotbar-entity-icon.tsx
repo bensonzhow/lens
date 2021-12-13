@@ -33,6 +33,8 @@ import { cssNames, IClassName } from "../../utils";
 import { Icon } from "../icon";
 import { HotbarIcon } from "./hotbar-icon";
 import { LensKubernetesClusterStatus } from "../../../common/catalog-entities/kubernetes-cluster";
+import { getIconColourHash } from "../../../common/catalog/helpers";
+import { EntityIcon } from "../avatar";
 
 interface Props extends HTMLAttributes<HTMLElement> {
   entity: CatalogEntity;
@@ -65,9 +67,9 @@ export class HotbarEntityIcon extends React.Component<Props> {
 
     if (category.metadata.icon.includes("<svg")) {
       return <Icon svg={category.metadata.icon} className={className} />;
-    } else {
-      return <Icon material={category.metadata.icon} className={className} />;
     }
+
+    return <Icon material={category.metadata.icon} className={className} />;
   }
 
   get ledIcon() {
@@ -106,10 +108,9 @@ export class HotbarEntityIcon extends React.Component<Props> {
 
     return (
       <HotbarIcon
-        uid={entity.metadata.uid}
-        title={entity.metadata.name}
+        uid={entity.getId()}
+        colorHash={getIconColourHash(entity)}
         source={entity.metadata.source}
-        src={entity.spec.icon?.src}
         material={entity.spec.icon?.material}
         background={entity.spec.icon?.background}
         className={this.props.className}
@@ -117,7 +118,8 @@ export class HotbarEntityIcon extends React.Component<Props> {
         onMenuOpen={() => this.onMenuOpen()}
         disabled={!entity}
         menuItems={this.contextMenu.menuItems}
-        tooltip={`${entity.metadata.name} (${entity.metadata.source})`}
+        tooltip={`${entity.getName()} (${entity.metadata.source})`}
+        avatarChildren={<EntityIcon entity={entity} />}
         {...elemProps}
       >
         { this.ledIcon }

@@ -51,13 +51,13 @@ const clusterEntity = new KubernetesCluster({
 
 describe("<SidebarCluster/>", () => {
   it("renders w/o errors", () => {
-    const { container } = render(<SidebarCluster clusterEntity={clusterEntity}/>);
+    const { container } = render(<SidebarCluster entity={clusterEntity}/>);
 
     expect(container).toBeInstanceOf(HTMLElement);
   });
 
   it("renders cluster avatar and name", () => {
-    const { getByText, getAllByText } = render(<SidebarCluster clusterEntity={clusterEntity}/>);
+    const { getByText, getAllByText } = render(<SidebarCluster entity={clusterEntity}/>);
 
     expect(getByText("tc")).toBeInTheDocument();
 
@@ -71,7 +71,7 @@ describe("<SidebarCluster/>", () => {
   });
 
   it("renders cluster menu", () => {
-    const { getByTestId, getByText } = render(<SidebarCluster clusterEntity={clusterEntity}/>);
+    const { getByTestId, getByText } = render(<SidebarCluster entity={clusterEntity}/>);
     const link = getByTestId("sidebar-cluster-dropdown");
 
     fireEvent.click(link);

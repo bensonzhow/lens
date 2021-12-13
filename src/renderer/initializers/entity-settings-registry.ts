@@ -21,6 +21,7 @@
 
 import { EntitySettingRegistry } from "../../extensions/registries";
 import * as clusterSettings from "../components/cluster-settings";
+import * as entitySettings from "../components/entity-settings/short-name-setting";
 
 export function initEntitySettingsRegistry() {
   EntitySettingRegistry.getInstance()
@@ -78,6 +79,15 @@ export function initEntitySettingsRegistry() {
         group: "Settings",
         components: {
           View: clusterSettings.NodeShellSettings,
+        },
+      },
+      {
+        apiVersions: "*",
+        kind: "*",
+        title: "Short Name",
+        group: "Settings",
+        components: {
+          View: entitySettings.ShortNameSetting,
         },
       },
     ]);

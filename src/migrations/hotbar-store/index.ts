@@ -27,10 +27,12 @@ import version500alpha0 from "./5.0.0-alpha.0";
 import version500alpha2 from "./5.0.0-alpha.2";
 import version500beta5 from "./5.0.0-beta.5";
 import version500beta10 from "./5.0.0-beta.10";
+import version540alpha1 from "./5.4.0-alpha.1";
 
 export default joinMigrations(
   version500alpha0,
   version500alpha2,
   version500beta5,
   version500beta10,
+  version540alpha1,
 );

@@ -19,38 +19,33 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import styles from "./avatar.module.css";
+import React, { useState } from "react";
+import { observer } from "mobx-react";
+import type { EntitySettingViewProps } from "../../../extensions/registries";
+import { SubTitle } from "../layout/sub-title";
+import { Input } from "../input";
+import { EntityPreferencesStore } from "../../../common/entity-preferences-store";
+import { computeDefaultShortName } from "../../../common/catalog/helpers";
 
-import React, { HTMLAttributes } from "react";
-import randomColor from "randomcolor";
-import { cssNames } from "../../utils";
-
-export interface AvatarProps extends HTMLAttributes<HTMLElement> {
-  colorHash?: string;
-  size?: number;
-  background?: string;
-  variant?: "circle" | "rounded" | "square";
-  disabled?: boolean;
-}
-
-export function Avatar(props: AvatarProps) {
-  const { variant = "rounded", size = 32, colorHash, children, background, className, disabled, ...rest } = props;
+export const ShortNameSetting = observer(({ entity }: EntitySettingViewProps) => {
+  const [shortName, setShortName] = useState(entity.metadata.shortName ?? "");
+  const store = EntityPreferencesStore.getInstance();
 
   return (
-    <div
-      className={cssNames(styles.Avatar, {
-        [styles.circle]: variant == "circle",
-        [styles.rounded]: variant == "rounded",
-        [styles.disabled]: disabled,
-      }, className)}
-      style={{
-        width: `${size}px`,
-        height: `${size}px`,
-        backgroundColor: background || randomColor({ seed: colorHash, luminosity: "dark" }),
-      }}
-      {...rest}
-    >
-      {children}
-    </div>
+    <section>
+      <section>
+        <SubTitle title="Entity Short Name" />
+        <Input
+          theme="round-black"
+          value={shortName}
+          placeholder={computeDefaultShortName(entity.getName())}
+          onChange={setShortName}
+          onBlur={() => store.mergePreferences(entity.getId(), { shortName })}
+        />
+        <small className="hint">
+          The text for entity icons. By default it is calculated from the entity name.
+        </small>
+      </section>
+    </section>
   );
-}
+});

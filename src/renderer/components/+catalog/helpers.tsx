@@ -19,22 +19,32 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import styles from "./catalog.module.css";
 import React from "react";
-import "@testing-library/jest-dom/extend-expect";
-import { render } from "@testing-library/react";
-import { Avatar } from "../avatar";
-import { Icon } from "../../icon";
+import { KubeObject } from "../../../common/k8s-api/kube-object";
+import type { CatalogEntity } from "../../api/catalog-entity";
+import { Badge } from "../badge";
+import { navigation } from "../../navigation";
+import { searchUrlParam } from "../input";
 
-describe("<Avatar/>", () => {
-  test("renders w/o errors", () => {
-    const { container } = render(<Avatar>JF</Avatar>);
-
-    expect(container).toBeInstanceOf(HTMLElement);
-  });
-
-  test("shows custom icon passed as children", () => {
-    const { getByTestId } = render(<Avatar><Icon material="alarm" data-testid="alarm-icon"/></Avatar>);
-
-    expect(getByTestId("alarm-icon")).toBeInTheDocument();
-  });
-});
+/**
+ * @param entity The entity to render badge labels for
+ */
+export function getLabelBadges(entity: CatalogEntity, onClick?: (evt: React.MouseEvent<any, MouseEvent>) => void) {
+  return KubeObject.stringifyLabels(entity.metadata.labels)
+    .map(label => (
+      <Badge
+        scrollable
+        className={styles.badge}
+        key={label}
+        label={label}
+        title={label}
+        onClick={(event) => {
+          navigation.searchParams.set(searchUrlParam.name, label);
+          onClick?.(event);
+          event.stopPropagation();
+        }}
+        expandable={false}
+      />
+    ));
+}

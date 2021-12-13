@@ -27,32 +27,34 @@ import type { CatalogCategory, CatalogEntity } from "../../../common/catalog";
 import { Icon } from "../icon";
 import { CatalogEntityDrawerMenu } from "./catalog-entity-drawer-menu";
 import { CatalogEntityDetailRegistry } from "../../../extensions/registries";
-import type { CatalogEntityItem } from "./catalog-entity-item";
 import { isDevelopment } from "../../../common/vars";
 import { cssNames } from "../../utils";
 import { Avatar } from "../avatar";
+import { getIconColourHash } from "../../../common/catalog/helpers";
+import { EntityIcon } from "../entity-icon";
+import { getLabelBadges } from "./helpers";
 
-interface Props<T extends CatalogEntity> {
-  item: CatalogEntityItem<T> | null | undefined;
+interface Props {
+  entity: CatalogEntity | null | undefined;
   hideDetails(): void;
+  onRun: () => void;
 }
 
 @observer
-export class CatalogEntityDetails<T extends CatalogEntity> extends Component<Props<T>> {
+export class CatalogEntityDetails extends Component<Props> {
   categoryIcon(category: CatalogCategory) {
-    if (category.metadata.icon.includes("<svg")) {
-      return <Icon svg={category.metadata.icon} smallest />;
-    } else {
-      return <Icon material={category.metadata.icon} smallest />;
-    }
+    const key = category.metadata.icon.includes("<svg") ? "svg" : "material";
+
+    return <Icon {...{ [key]: category.metadata.icon }} smallest />;
   }
 
-  renderContent(item: CatalogEntityItem<T>) {
-    const detailItems = CatalogEntityDetailRegistry.getInstance().getItemsForKind(item.kind, item.apiVersion);
-    const details = detailItems.map(({ components }, index) => {
-      return <components.Details entity={item.entity} key={index}/>;
-    });
+  renderContent(entity: CatalogEntity | undefined, onRun: () => void) {
+    if (!entity) {
+      return null;
+    }
 
+    const detailItems = CatalogEntityDetailRegistry.getInstance().getItemsForKind(entity.kind, entity.apiVersion);
+    const details = detailItems.map(({ components }, index) => <components.Details entity={entity} key={index} />);
     const showDetails = detailItems.find((item) => item.priority > 999) === undefined;
 
     return (
@@ -61,18 +63,16 @@ export class CatalogEntityDetails<T extends CatalogEntity> extends Component<Pro
           <div className="flex">
             <div className={styles.entityIcon}>
               <Avatar
-                title={item.name}
-                colorHash={`${item.name}-${item.source}`}
+                colorHash={getIconColourHash(entity)}
                 size={128}
-                src={item.entity.spec.icon?.src}
                 data-testid="detail-panel-hot-bar-icon"
-                background={item.entity.spec.icon?.background}
-                onClick={() => item.onRun()}
+                background={entity.spec.icon?.background}
+                onClick={onRun}
                 className={styles.avatar}
               >
-                {item.entity.spec.icon?.material && <Icon material={item.entity.spec.icon?.material}/>}
+                <EntityIcon entity={entity} />
               </Avatar>
-              {item?.enabled && (
+              {entity?.isEnabled() && (
                 <div className={styles.hint}>
                   Click to open
                 </div>
@@ -80,23 +80,23 @@ export class CatalogEntityDetails<T extends CatalogEntity> extends Component<Pro
             </div>
             <div className={cssNames("box grow", styles.metadata)}>
               <DrawerItem name="Name">
-                {item.name}
+                {entity.getName()}
               </DrawerItem>
               <DrawerItem name="Kind">
-                {item.kind}
+                {entity.kind}
               </DrawerItem>
               <DrawerItem name="Source">
-                {item.source}
+                {entity.getSource()}
               </DrawerItem>
               <DrawerItem name="Status">
-                {item.phase}
+                {entity.status.phase}
               </DrawerItem>
               <DrawerItem name="Labels">
-                {...item.getLabelBadges(this.props.hideDetails)}
+                {...getLabelBadges(entity, this.props.hideDetails)}
               </DrawerItem>
               {isDevelopment && (
                 <DrawerItem name="Id">
-                  {item.getId()}
+                  {entity.getId()}
                 </DrawerItem>
               )}
             </div>
@@ -110,19 +110,18 @@ export class CatalogEntityDetails<T extends CatalogEntity> extends Component<Pro
   }
 
   render() {
-    const { item, hideDetails } = this.props;
-    const title = `${item.kind}: ${item.name}`;
+    const { entity, hideDetails, onRun } = this.props;
 
     return (
       <Drawer
         className={styles.entityDetails}
         usePortal={true}
         open={true}
-        title={title}
-        toolbar={<CatalogEntityDrawerMenu item={item} key={item.getId()} />}
+        title={`${entity.kind}: ${entity.getName()}`}
+        toolbar={<CatalogEntityDrawerMenu entity={entity} key={entity.getId()} />}
         onClose={hideDetails}
       >
-        {item && this.renderContent(item)}
+        {this.renderContent(entity, onRun)}
       </Drawer>
     );
   }

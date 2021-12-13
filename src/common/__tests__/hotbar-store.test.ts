@@ -23,6 +23,7 @@ import { anyObject } from "jest-mock-extended";
 import mockFs from "mock-fs";
 import logger from "../../main/logger";
 import { AppPaths } from "../app-paths";
+import type { CatalogEntity } from "../catalog";
 import { ClusterStore } from "../cluster-store";
 import { HotbarStore } from "../hotbar-store";
 
@@ -54,18 +55,15 @@ jest.mock("../../main/catalog/catalog-entity-registry", () => ({
   },
 }));
 
-const testCluster = {
-  uid: "test",
-  name: "test",
+const testCluster: CatalogEntity = {
   apiVersion: "v1",
   kind: "Cluster",
   status: {
     phase: "Running",
   },
   spec: {},
-  getName: jest.fn(),
-  getId: jest.fn(),
-  onDetailsOpen: jest.fn(),
+  getName: jest.fn(() => "test"),
+  getId: jest.fn(() => "test"),
   onContextMenuOpen: jest.fn(),
   onSettingsOpen: jest.fn(),
   metadata: {
@@ -75,18 +73,15 @@ const testCluster = {
   },
 };
 
-const minikubeCluster = {
-  uid: "minikube",
-  name: "minikube",
+const minikubeCluster: CatalogEntity = {
   apiVersion: "v1",
   kind: "Cluster",
   status: {
     phase: "Running",
   },
   spec: {},
-  getName: jest.fn(),
-  getId: jest.fn(),
-  onDetailsOpen: jest.fn(),
+  getName: jest.fn(() => "minikube"),
+  getId: jest.fn(() => "minikube"),
   onContextMenuOpen: jest.fn(),
   onSettingsOpen: jest.fn(),
   metadata: {
@@ -96,18 +91,15 @@ const minikubeCluster = {
   },
 };
 
-const awsCluster = {
-  uid: "aws",
-  name: "aws",
+const awsCluster: CatalogEntity = {
   apiVersion: "v1",
   kind: "Cluster",
   status: {
     phase: "Running",
   },
   spec: {},
-  getName: jest.fn(),
-  getId: jest.fn(),
-  onDetailsOpen: jest.fn(),
+  getName: jest.fn(() => "aws"),
+  getId: jest.fn(() => "aws"),
   onContextMenuOpen: jest.fn(),
   onSettingsOpen: jest.fn(),
   metadata: {
@@ -436,6 +428,7 @@ describe("HotbarStore", () => {
         entity: {
           name: "mycluster",
           source: "local",
+          shortName: "my",
           uid: "1dfa26e2ebab15780a3547e9c7fa785c",
         },
       });
@@ -444,6 +437,7 @@ describe("HotbarStore", () => {
         entity: {
           name: "my_shiny_cluster",
           source: "remote",
+          shortName: "msc",
           uid: "55b42c3c7ba3b04193416cda405269a5",
         },
       });

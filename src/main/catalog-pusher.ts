@@ -25,15 +25,25 @@ import type { CatalogEntityRegistry } from "./catalog";
 import "../common/catalog-entities/kubernetes-cluster";
 import { toJS } from "../common/utils";
 import { debounce } from "lodash";
-import type { CatalogEntity } from "../common/catalog";
+import type { CatalogEntity, CatalogEntityData, CatalogEntityKindData } from "../common/catalog";
+import { EntityPreferencesStore } from "../common/entity-preferences-store";
 
+function changesDueToPreferences({ metadata, spec, status, kind, apiVersion }: CatalogEntity): CatalogEntityData & CatalogEntityKindData {
+  const preferences = EntityPreferencesStore.getInstance().preferences.get(metadata.uid) ?? {};
 
-const broadcaster = debounce((items: CatalogEntity[]) => {
+  if (preferences.shortName) {
+    metadata.shortName ||= preferences.shortName;
+  }
+
+  return { metadata, spec, status, kind, apiVersion };
+}
+
+const broadcaster = debounce((items: (CatalogEntityData & CatalogEntityKindData)[]) => {
   broadcastMessage("catalog:items", items);
 }, 1_000, { leading: true, trailing: true });
 
 export function pushCatalogToRenderer(catalog: CatalogEntityRegistry) {
-  return reaction(() => toJS(catalog.items), (items) => {
+  return reaction(() => toJS(catalog.items).map(changesDueToPreferences), (items) => {
     broadcaster(items);
   }, {
     fireImmediately: true,

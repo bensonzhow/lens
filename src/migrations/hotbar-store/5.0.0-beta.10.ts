@@ -24,6 +24,7 @@ import { isNull } from "lodash";
 import path from "path";
 import * as uuid from "uuid";
 import { AppPaths } from "../../common/app-paths";
+import { computeDefaultShortName } from "../../common/catalog/helpers";
 import type { ClusterStoreModel } from "../../common/cluster-store";
 import { defaultHotbarCells, getEmptyHotbar, Hotbar, HotbarItem } from "../../common/hotbar-types";
 import { catalogEntity } from "../../main/catalog-sources/general";
@@ -55,7 +56,14 @@ export default {
       const hotbar = getEmptyHotbar("default");
       const { metadata: { uid, name, source }} = catalogEntity;
 
-      hotbar.items[0] = { entity: { uid, name, source }};
+      hotbar.items[0] = {
+        entity: {
+          uid,
+          name,
+          source,
+          shortName: computeDefaultShortName(name),
+        },
+      };
 
       hotbars.push(hotbar);
     }
@@ -100,10 +108,13 @@ export default {
           migrationLog(`Adding cluster ${uid} to ${workspaceHotbar.name}`);
 
           if (workspaceHotbar?.items.length < defaultHotbarCells) {
+            const name = cluster.preferences.clusterName || cluster.contextName;
+
             workspaceHotbar.items.push({
               entity: {
                 uid: generateNewIdFor(cluster),
-                name: cluster.preferences.clusterName || cluster.contextName,
+                name,
+                shortName: computeDefaultShortName(name),
               },
             });
           }
@@ -142,15 +153,36 @@ export default {
             // called "default" is full than overriding a hotbar item
             const hotbar = getEmptyHotbar("initial");
 
-            hotbar.items[0] = { entity: { uid, name, source }};
+            hotbar.items[0] = {
+              entity: {
+                uid,
+                name,
+                source,
+                shortName: computeDefaultShortName(name),
+              },
+            };
             hotbars.unshift(hotbar);
           } else {
-            defaultHotbar.items[freeIndex] = { entity: { uid, name, source }};
+            defaultHotbar.items[freeIndex] = {
+              entity: {
+                uid,
+                name,
+                source,
+                shortName: computeDefaultShortName(name),
+              },
+            };
           }
         } else {
           const hotbar = getEmptyHotbar("default");
 
-          hotbar.items[0] = { entity: { uid, name, source }};
+          hotbar.items[0] = {
+            entity: {
+              uid,
+              name,
+              source,
+              shortName: computeDefaultShortName(name),
+            },
+          };
           hotbars.unshift(hotbar);
         }
       }

@@ -19,22 +19,23 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import "@testing-library/jest-dom/extend-expect";
-import { render } from "@testing-library/react";
-import { Avatar } from "../avatar";
-import { Icon } from "../../icon";
+import { computeDefaultShortName } from "../../common/catalog/helpers";
+import type { Hotbar } from "../../common/hotbar-types";
+import type { MigrationDeclaration } from "../helpers";
 
-describe("<Avatar/>", () => {
-  test("renders w/o errors", () => {
-    const { container } = render(<Avatar>JF</Avatar>);
+export default {
+  version: "5.4.0-alpha.1",
+  run(store) {
+    const hotbars: Hotbar[] = store.get("hotbars") ?? [];
 
-    expect(container).toBeInstanceOf(HTMLElement);
-  });
+    for (const hotbar of hotbars) {
+      for (const item of hotbar.items) {
+        if (item) {
+          item.entity.shortName ??= computeDefaultShortName(item.entity.name);
+        }
+      }
+    }
 
-  test("shows custom icon passed as children", () => {
-    const { getByTestId } = render(<Avatar><Icon material="alarm" data-testid="alarm-icon"/></Avatar>);
-
-    expect(getByTestId("alarm-icon")).toBeInTheDocument();
-  });
-});
+    store.set("hotbars", hotbars);
+  },
+} as MigrationDeclaration;
