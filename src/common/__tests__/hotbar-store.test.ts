@@ -64,6 +64,8 @@ const testCluster: CatalogEntity = {
   spec: {},
   getName: jest.fn(() => "test"),
   getId: jest.fn(() => "test"),
+  getSource: jest.fn(() => "unknown"),
+  isEnabled: jest.fn(() => true),
   onContextMenuOpen: jest.fn(),
   onSettingsOpen: jest.fn(),
   metadata: {
@@ -82,6 +84,8 @@ const minikubeCluster: CatalogEntity = {
   spec: {},
   getName: jest.fn(() => "minikube"),
   getId: jest.fn(() => "minikube"),
+  getSource: jest.fn(() => "unknown"),
+  isEnabled: jest.fn(() => true),
   onContextMenuOpen: jest.fn(),
   onSettingsOpen: jest.fn(),
   metadata: {
@@ -100,6 +104,8 @@ const awsCluster: CatalogEntity = {
   spec: {},
   getName: jest.fn(() => "aws"),
   getId: jest.fn(() => "aws"),
+  getSource: jest.fn(() => "unknown"),
+  isEnabled: jest.fn(() => true),
   onContextMenuOpen: jest.fn(),
   onSettingsOpen: jest.fn(),
   metadata: {
