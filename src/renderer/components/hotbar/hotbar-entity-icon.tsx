@@ -34,7 +34,7 @@ import { Icon } from "../icon";
 import { HotbarIcon } from "./hotbar-icon";
 import { LensKubernetesClusterStatus } from "../../../common/catalog-entities/kubernetes-cluster";
 import { getIconColourHash } from "../../../common/catalog/helpers";
-import { EntityIcon } from "../avatar";
+import { EntityIcon } from "../entity-icon";
 
 interface Props extends HTMLAttributes<HTMLElement> {
   entity: CatalogEntity;
