@@ -95,7 +95,9 @@ export function initIpcMainHandlers() {
       const localStorageFilePath = path.resolve(AppPaths.get("userData"), "lens-local-storage", `${cluster.id}.json`);
 
       await remove(localStorageFilePath);
-    } catch {}
+    } catch {
+      // ignore error
+    }
   });
 
   ipcMainHandle(clusterSetDeletingHandler, (event, clusterId: string) => {

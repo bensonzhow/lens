@@ -54,6 +54,7 @@ module.exports = {
         "react-hooks",
       ],
       rules: {
+        "no-constant-condition": ["error", { "checkLoops": false }],
         "header/header": [2, "./license-header"],
         "comma-dangle": ["error", "always-multiline"],
         "comma-spacing": "error",
@@ -107,6 +108,7 @@ module.exports = {
       ],
       parser: "@typescript-eslint/parser",
       extends: [
+        "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
       ],
       plugins: [
@@ -118,6 +120,7 @@ module.exports = {
         sourceType: "module",
       },
       rules: {
+        "no-constant-condition": ["error", { "checkLoops": false }],
         "header/header": [2, "./license-header"],
         "no-invalid-this": "off",
         "@typescript-eslint/no-invalid-this": ["error"],
@@ -190,6 +193,7 @@ module.exports = {
         "unused-imports",
       ],
       extends: [
+        "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:react/recommended",
       ],
@@ -199,6 +203,7 @@ module.exports = {
         jsx: true,
       },
       rules: {
+        "no-constant-condition": ["error", { "checkLoops": false }],
         "header/header": [2, "./license-header"],
         "no-invalid-this": "off",
         "@typescript-eslint/no-invalid-this": ["error"],
